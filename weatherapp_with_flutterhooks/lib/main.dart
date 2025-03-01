@@ -1,16 +1,22 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/theme_manager.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //Initialize dotenv
+  await dotenv.load(fileName: ".env");
+
   runApp(const ProviderScope(child: MainApp()));
 }
 
-class MainApp extends HookConsumerWidget {
+class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
   @override
@@ -22,7 +28,12 @@ class MainApp extends HookConsumerWidget {
       home: Scaffold(
         drawer: DrawerHomeScreen(),
         body: Center(
-          child: Text('Hello World!'),
+          child: Column(
+            children: [
+              Text('Hello World!'),
+              CircularProgressIndicator(),
+            ],
+          ),
         ),
       ),
     );
