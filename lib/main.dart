@@ -29,6 +29,7 @@ class MainApp extends ConsumerWidget {
         drawer: DrawerHomeScreen(),
         body: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Hello World!'),
               CircularProgressIndicator(),
