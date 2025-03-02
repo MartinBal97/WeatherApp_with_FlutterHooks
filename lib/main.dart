@@ -6,6 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/theme_manager.dart';
+import 'package:weatherapp_with_flutterhooks/data/repositories/weather_repo.dart';
+import 'package:weatherapp_with_flutterhooks/domain/models/weather_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +23,14 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const lat = 40.4168;
+    const lon = -3.7038; // Madrid, por ejemplo
+
     final isDarkMode = ref.watch(darkModeProvider);
+
+    final getCurrentPosition = ref.watch(getCurrentCityProvider);
+
+    final AsyncValue<Weather> weatherAsync = ref.watch(getWeatherProvider(lat: lat, lon: lon));
 
     return MaterialApp(
       theme: AppTheme(isDarkmode: isDarkMode).getTheme(),
@@ -31,8 +40,28 @@ class MainApp extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Hello World!'),
-              CircularProgressIndicator(),
+              weatherAsync.when(
+                data: (data) {
+                  return Text(data.main!.temp.toString());
+                },
+                error: (error, stackTrace) {
+                  return Text(error.toString());
+                },
+                loading: () {
+                  return CircularProgressIndicator();
+                },
+              ),
+              getCurrentPosition.when(
+                data: (data) {
+                  return Text(data.toString());
+                },
+                error: (error, stackTrace) {
+                  return Text(error.toString());
+                },
+                loading: () {
+                  return CircularProgressIndicator();
+                },
+              ),
             ],
           ),
         ),
