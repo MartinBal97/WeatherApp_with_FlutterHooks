@@ -72,6 +72,15 @@ Future<Position> getCurrentCity(Ref ref) async {
 
 @riverpod
 Future<Location> getLatLongFromAddress(Ref ref, String address) async {
-  List<Location> locations = await locationFromAddress(address);
-  return locations.first;
+  try {
+    List<Location> locations = await locationFromAddress(address);
+
+    if (locations.isEmpty) {
+      throw Exception("No se encontraron coordenadas para la dirección proporcionada.");
+    }
+
+    return locations.first;
+  } catch (e) {
+    throw Exception("Error al obtener la ubicación. Verifica la dirección ingresada.");
+  }
 }

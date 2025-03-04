@@ -190,7 +190,7 @@ final getCurrentCityProvider = AutoDisposeFutureProvider<Position>.internal(
 // ignore: unused_element
 typedef GetCurrentCityRef = AutoDisposeFutureProviderRef<Position>;
 String _$getLatLongFromAddressHash() =>
-    r'7e30237ff89cfa9fb2530786201f6813d34315ad';
+    r'fe6fa9e7fa503c05d30f8b92743698f2db2489f2';
 
 /// See also [getLatLongFromAddress].
 @ProviderFor(getLatLongFromAddress)

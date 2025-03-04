@@ -1,14 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:geocoding_platform_interface/src/models/location.dart';
-import 'package:geolocator_platform_interface/src/models/position.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/theme_manager.dart';
 import 'package:weatherapp_with_flutterhooks/data/repositories/weather_repo.dart';
-import 'package:weatherapp_with_flutterhooks/domain/models/weather_model.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,54 +25,38 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const lat = 40.4168;
-    const lon = -3.7038; // Madrid, por ejemplo
-
     final isDarkMode = ref.watch(darkModeProvider);
 
-    final AsyncValue<Position> getCurrentPosition = ref.watch(getCurrentCityProvider);
-    final AsyncValue<Weather> weatherAsync = ref.watch(getWeatherProvider(lat: lat, lon: lon));
-
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: AppTheme(isDarkmode: isDarkMode).getTheme(),
-      home: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: Text('Welcome to WeatherApp'),
-        ),
-        endDrawer: DrawerHomeScreen(),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              weatherAsync.when(
-                data: (data) => Text(data.main!.temp.toString()),
-                error: (er, st) => Text(er.toString()),
-                loading: () => CircularProgressIndicator(),
-              ),
-              getCurrentPosition.when(
-                data: (data) => Text(data.toString()),
-                error: (er, st) => Text(er.toString()),
-                loading: () => CircularProgressIndicator(),
-              ),
-            ],
-          ),
-        ),
-      ),
+      home: HomeScreen(),
     );
   }
 }
 
 class DrawerHomeScreen extends HookConsumerWidget {
-  const DrawerHomeScreen({
-    super.key,
-  });
+  const DrawerHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
     final input = useState('Madrid');
-    final AsyncValue<Location> locationAsync = ref.watch(getLatLongFromAddressProvider(input.value));
+
+    void onEditingComplete() {
+      input.value = searchController.text;
+      FocusScope.of(context).unfocus();
+
+      try {
+        final AsyncValue<Location> locationAsync = ref.watch(
+          getLatLongFromAddressProvider(input.value),
+        );
+      } catch (e) {
+        log('Hubo un error $e');
+      }
+
+      log('Buscando: ${input.value}');
+    }
 
     return Drawer(
       child: ListView(
@@ -109,8 +94,8 @@ class DrawerHomeScreen extends HookConsumerWidget {
                     prefixIcon: Icon(Icons.search, color: context.onSurface),
                     contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   ),
-                  onChanged: (value) => input.value = value,
-                )
+                  onEditingComplete: onEditingComplete,
+                ),
               ],
             ),
           ),

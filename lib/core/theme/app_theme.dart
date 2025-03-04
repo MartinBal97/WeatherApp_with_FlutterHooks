@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /* const Color purple500 = Color(0xFF7b147b);
@@ -45,8 +46,8 @@ class AppTheme {
 
   ThemeData getTheme() => ThemeData(
         brightness: isDarkmode ? Brightness.dark : Brightness.light,
-        colorSchemeSeed: seedColor,
-        fontFamily: 'Geist', //* Ver si la quitamos
+        colorSchemeSeed: CupertinoColors.systemYellow,
+        // fontFamily: 'Geist', //* Ver si la quitamos
         textTheme: _textTheme,
       );
 }
