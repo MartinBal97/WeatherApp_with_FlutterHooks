@@ -189,5 +189,137 @@ final getCurrentCityProvider = AutoDisposeFutureProvider<Position>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef GetCurrentCityRef = AutoDisposeFutureProviderRef<Position>;
+String _$getLatLongFromAddressHash() =>
+    r'7e30237ff89cfa9fb2530786201f6813d34315ad';
+
+/// See also [getLatLongFromAddress].
+@ProviderFor(getLatLongFromAddress)
+const getLatLongFromAddressProvider = GetLatLongFromAddressFamily();
+
+/// See also [getLatLongFromAddress].
+class GetLatLongFromAddressFamily extends Family<AsyncValue<Location>> {
+  /// See also [getLatLongFromAddress].
+  const GetLatLongFromAddressFamily();
+
+  /// See also [getLatLongFromAddress].
+  GetLatLongFromAddressProvider call(
+    String address,
+  ) {
+    return GetLatLongFromAddressProvider(
+      address,
+    );
+  }
+
+  @override
+  GetLatLongFromAddressProvider getProviderOverride(
+    covariant GetLatLongFromAddressProvider provider,
+  ) {
+    return call(
+      provider.address,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getLatLongFromAddressProvider';
+}
+
+/// See also [getLatLongFromAddress].
+class GetLatLongFromAddressProvider
+    extends AutoDisposeFutureProvider<Location> {
+  /// See also [getLatLongFromAddress].
+  GetLatLongFromAddressProvider(
+    String address,
+  ) : this._internal(
+          (ref) => getLatLongFromAddress(
+            ref as GetLatLongFromAddressRef,
+            address,
+          ),
+          from: getLatLongFromAddressProvider,
+          name: r'getLatLongFromAddressProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getLatLongFromAddressHash,
+          dependencies: GetLatLongFromAddressFamily._dependencies,
+          allTransitiveDependencies:
+              GetLatLongFromAddressFamily._allTransitiveDependencies,
+          address: address,
+        );
+
+  GetLatLongFromAddressProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.address,
+  }) : super.internal();
+
+  final String address;
+
+  @override
+  Override overrideWith(
+    FutureOr<Location> Function(GetLatLongFromAddressRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetLatLongFromAddressProvider._internal(
+        (ref) => create(ref as GetLatLongFromAddressRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        address: address,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Location> createElement() {
+    return _GetLatLongFromAddressProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetLatLongFromAddressProvider && other.address == address;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, address.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin GetLatLongFromAddressRef on AutoDisposeFutureProviderRef<Location> {
+  /// The parameter `address` of this provider.
+  String get address;
+}
+
+class _GetLatLongFromAddressProviderElement
+    extends AutoDisposeFutureProviderElement<Location>
+    with GetLatLongFromAddressRef {
+  _GetLatLongFromAddressProviderElement(super.provider);
+
+  @override
+  String get address => (origin as GetLatLongFromAddressProvider).address;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

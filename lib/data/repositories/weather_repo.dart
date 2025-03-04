@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,7 +15,6 @@ final dio = Dio();
 @riverpod
 Future<Weather> getWeather(Ref ref, {required double lat, required double lon}) async {
   final apiKey = '${dotenv.env["API_KEY"]}';
-  //const exclude = 'minutely,hourly,alerts';
 
   final url = 'https://api.openweathermap.org/data/2.5/weather?&units=metric&lat=$lat&lon=$lon&appid=$apiKey';
 
@@ -68,4 +68,10 @@ Future<Position> getCurrentCity(Ref ref) async {
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
   return await Geolocator.getCurrentPosition();
+}
+
+@riverpod
+Future<Location> getLatLongFromAddress(Ref ref, String address) async {
+  List<Location> locations = await locationFromAddress(address);
+  return locations.first;
 }
