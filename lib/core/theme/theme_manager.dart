@@ -6,7 +6,7 @@ part 'theme_manager.g.dart';
 @riverpod
 class DarkMode extends _$DarkMode {
   @override
-  bool build() => true;
+  bool build() => false;
 
   void changeThemeMode() {
     state = !state;

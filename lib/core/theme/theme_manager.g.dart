@@ -6,7 +6,7 @@ part of 'theme_manager.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$darkModeHash() => r'92daf1342a7b6e2bbee0ce80f4691a943952fe72';
+String _$darkModeHash() => r'369f031e62821704cf842fba7fdbdbeac784ac50';
 
 /// See also [DarkMode].
 @ProviderFor(DarkMode)
