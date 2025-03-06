@@ -2,11 +2,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme_manager.g.dart';
 
-//@Riverpod(keepAlive: true)
-@riverpod
+@Riverpod(keepAlive: true)
 class DarkMode extends _$DarkMode {
   @override
-  bool build() => true;
+  bool build() => false;
 
   void changeThemeMode() {
     state = !state;
