@@ -1,13 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/theme_manager.dart';
-import 'package:weatherapp_with_flutterhooks/data/repositories/weather_repo.dart';
+import 'package:weatherapp_with_flutterhooks/core/utils/functions.dart';
 
 class DrawerHomeScreen extends HookConsumerWidget {
   const DrawerHomeScreen({super.key});
@@ -15,9 +12,10 @@ class DrawerHomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
-    final input = useState('Madrid');
+    final lat = useState<double?>(null);
+    final lon = useState<double?>(null);
 
-    void onEditingComplete() {
+/*     void onEditingComplete() {
       input.value = searchController.text;
       FocusScope.of(context).unfocus();
 
@@ -30,7 +28,7 @@ class DrawerHomeScreen extends HookConsumerWidget {
       }
 
       log('Buscando: ${input.value}');
-    }
+    } */
 
     return Drawer(
       child: ListView(
@@ -68,7 +66,9 @@ class DrawerHomeScreen extends HookConsumerWidget {
                     prefixIcon: Icon(Icons.search, color: context.onSurface),
                     contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   ),
-                  onEditingComplete: onEditingComplete,
+                  onEditingComplete: () {
+                    searchLocation(context, ref, searchController, lon, lat, isDrawer: true);
+                  },
                 ),
               ],
             ),

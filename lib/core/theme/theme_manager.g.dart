@@ -6,11 +6,11 @@ part of 'theme_manager.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$darkModeHash() => r'369f031e62821704cf842fba7fdbdbeac784ac50';
+String _$darkModeHash() => r'3f14836d560b538a4afb98965637287cdba32af4';
 
 /// See also [DarkMode].
 @ProviderFor(DarkMode)
-final darkModeProvider = AutoDisposeNotifierProvider<DarkMode, bool>.internal(
+final darkModeProvider = NotifierProvider<DarkMode, bool>.internal(
   DarkMode.new,
   name: r'darkModeProvider',
   debugGetCreateSourceHash:
@@ -19,6 +19,6 @@ final darkModeProvider = AutoDisposeNotifierProvider<DarkMode, bool>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef _$DarkMode = AutoDisposeNotifier<bool>;
+typedef _$DarkMode = Notifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

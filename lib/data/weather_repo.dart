@@ -6,7 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:weatherapp_with_flutterhooks/domain/models/weather_model.dart';
+import 'package:weatherapp_with_flutterhooks/domain/weather_model.dart';
 
 part 'weather_repo.g.dart';
 

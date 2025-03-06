@@ -45,6 +45,7 @@ class AppTheme {
 
   ThemeData getTheme() => ThemeData(
         brightness: isDarkmode ? Brightness.dark : Brightness.light,
+
         colorSchemeSeed: seedColor,
         // fontFamily: 'Geist', //* Ver si la quitamos
         textTheme: _textTheme,
