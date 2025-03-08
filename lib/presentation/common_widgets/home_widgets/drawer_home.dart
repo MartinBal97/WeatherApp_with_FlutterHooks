@@ -19,8 +19,6 @@ class DrawerHomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
-    final lat = useState<double?>(null);
-    final lon = useState<double?>(null);
 
     return Drawer(
       child: ListView(
@@ -59,25 +57,28 @@ class DrawerHomeScreen extends HookConsumerWidget {
                     contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   ),
                   onEditingComplete: () {
-                    searchLocation(context, ref, searchController, lon, lat, isDrawer: true);
+                    searchLocation(context, ref, searchController, lat, lon, isDrawer: true);
                   },
                 ),
               ],
             ),
           ),
           ListTile(
-            title: Text('Item 1'),
+            title: Text('See favorites'),
             onTap: () => Navigator.pop(context),
           ),
-          ListTile(
-            title: Text('Item 2'),
-            onTap: () => Navigator.pop(context),
-          ),
+
           gapH64,
           gapH64,
           gapH64,
           gapH64,
           gapH64,
+          // SwitchListTile(
+          //   value: ref.watch(darkModeProvider),
+          //   onChanged: (_) => ref.read(darkModeProvider.notifier).changeThemeMode(),
+          //   title: Text('Escuchar cambios en tiempo real'),
+          //   activeColor: Colors.green,
+          // ),
           SwitchListTile(
             value: ref.watch(darkModeProvider),
             onChanged: (_) => ref.read(darkModeProvider.notifier).changeThemeMode(),

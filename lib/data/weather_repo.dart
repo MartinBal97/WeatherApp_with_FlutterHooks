@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geocoding/geocoding.dart';
@@ -20,11 +18,9 @@ Future<Weather> getWeather(Ref ref, {required double lat, required double lon}) 
 
   try {
     final response = await dio.get(url);
-    log(response.data.toString());
     return Weather.fromJson(response.data);
   } catch (e) {
-    log(e.toString());
-    throw Exception('Error al obtener el clima: $e');
+    throw Exception('Error getting the weather: $e');
   }
 }
 
@@ -59,11 +55,11 @@ Future<Location> getLatLongFromAddress(Ref ref, String address) async {
     List<Location> locations = await locationFromAddress(address);
 
     if (locations.isEmpty) {
-      throw Exception("No se encontraron coordenadas para la dirección proporcionada.");
+      throw Exception("No coordinates were found for the address provided.");
     }
 
     return locations.first;
   } catch (e) {
-    throw Exception("Error al obtener la ubicación. Verifica la dirección ingresada.");
+    throw Exception("Error getting location. Please check the address entered.");
   }
 }

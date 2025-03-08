@@ -15,9 +15,9 @@ class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final searchController = useTextEditingController();
     final lat = useState<double?>(null);
     final lon = useState<double?>(null);
-    final searchController = useTextEditingController();
 
     final AsyncValue<Position> currentLocation = ref.watch(getCurrentCityProvider);
     // Hook para actualizar lat y lon cuando se obtenga la posición
@@ -42,7 +42,7 @@ class HomeScreen extends HookConsumerWidget {
     }, [lat.value, lon.value, currentLocation]);
 
     // Si lat y lon están disponibles, obtener el clima
-    final AsyncValue<Weather> weatherAsync = (lat.value != null && lon.value != null)
+    final AsyncValue<Weather> weatherData = (lat.value != null && lon.value != null)
         ? ref.watch(getWeatherProvider(lat: lat.value!, lon: lon.value!))
         : const AsyncValue.loading();
 
@@ -60,7 +60,7 @@ class HomeScreen extends HookConsumerWidget {
                 stops: [0.0, 1.0],
               ),
             ),
-            child: weatherAsync.when(
+            child: weatherData.when(
               data: (Weather data) {
                 return Center(
                   child: Padding(
