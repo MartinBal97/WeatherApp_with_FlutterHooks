@@ -7,28 +7,20 @@ import 'package:weatherapp_with_flutterhooks/core/theme/theme_manager.dart';
 import 'package:weatherapp_with_flutterhooks/core/utils/functions.dart';
 
 class DrawerHomeScreen extends HookConsumerWidget {
-  const DrawerHomeScreen({super.key});
+  final ValueNotifier<double?> lat;
+  final ValueNotifier<double?> lon;
+
+  const DrawerHomeScreen({
+    super.key,
+    required this.lat,
+    required this.lon,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
     final lat = useState<double?>(null);
     final lon = useState<double?>(null);
-
-/*     void onEditingComplete() {
-      input.value = searchController.text;
-      FocusScope.of(context).unfocus();
-
-      try {
-        final AsyncValue<Location> locationAsync = ref.watch(
-          getLatLongFromAddressProvider(input.value),
-        );
-      } catch (e) {
-        log('Hubo un error $e');
-      }
-
-      log('Buscando: ${input.value}');
-    } */
 
     return Drawer(
       child: ListView(

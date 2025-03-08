@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weatherapp_with_flutterhooks/data/weather_repo.dart';
 
-Future<void> searchLocation(BuildContext context, WidgetRef ref, TextEditingController searchController,
-    ValueNotifier<double?> lat, ValueNotifier<double?> lon,
-    {bool isDrawer = false}) async {
+Future<void> searchLocation(
+  BuildContext context,
+  WidgetRef ref,
+  TextEditingController searchController,
+  ValueNotifier<double?> lat,
+  ValueNotifier<double?> lon, {
+  bool isDrawer = false,
+}) async {
   final address = searchController.text;
   if (address.isNotEmpty) {
     try {
@@ -13,7 +18,7 @@ Future<void> searchLocation(BuildContext context, WidgetRef ref, TextEditingCont
       lon.value = locations.longitude;
 
       if (isDrawer) {
-        ref.watch(getCurrentCityProvider);
+        ref.watch(getWeatherProvider(lat: lat.value!, lon: lon.value!));
       }
 
       if (context.mounted) {
