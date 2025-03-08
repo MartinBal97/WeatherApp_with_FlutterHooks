@@ -5,14 +5,14 @@ import 'package:weatherapp_with_flutterhooks/data/weather_repo.dart';
 Future<void> searchLocation(
   BuildContext context,
   WidgetRef ref,
-  TextEditingController searchController,
+  String city,
   ValueNotifier<double?> lat,
   ValueNotifier<double?> lon, {
   bool isDrawer = false,
 }) async {
-  if (searchController.text.isNotEmpty) {
+  if (city.isNotEmpty) {
     try {
-      final locations = await ref.read(getLatLongFromAddressProvider(searchController.text).future);
+      final locations = await ref.read(getLatLongFromAddressProvider(city).future);
       lat.value = locations.latitude;
       lon.value = locations.longitude;
 
@@ -25,8 +25,6 @@ Future<void> searchLocation(
           SnackBar(content: Text('An error occurred while retrieving your location.')),
         );
       }
-    } finally {
-      searchController.clear();
     }
   }
 }

@@ -29,7 +29,7 @@ void showLocationInputDialog(
               decoration: const InputDecoration(labelText: 'Enter a city'),
             ),
             ElevatedButton(
-              onPressed: () => searchLocation(context, ref, searchController, lat, lon),
+              onPressed: () => searchLocation(context, ref, searchController.text, lat, lon),
               child: const Text('Confirm'),
             ),
             gapH16,
