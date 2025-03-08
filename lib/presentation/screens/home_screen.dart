@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:geolocator_platform_interface/src/models/position.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
@@ -48,7 +48,7 @@ class HomeScreen extends HookConsumerWidget {
 
     return Scaffold(
         appBar: AppBar(),
-        endDrawer: const DrawerHomeScreen(),
+        endDrawer: DrawerHomeScreen(lat: lat, lon: lon),
         body: SingleChildScrollView(
           child: Container(
             height: context.heightMq,
@@ -79,7 +79,10 @@ class HomeScreen extends HookConsumerWidget {
                                 style: context.s48w7.copyWith(fontSize: 40),
                               ),
                             ),
-                            IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border_rounded))
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.favorite_border_rounded),
+                            )
                           ],
                         ),
                         gapH20,
