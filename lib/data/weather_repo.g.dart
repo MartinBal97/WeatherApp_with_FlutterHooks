@@ -6,7 +6,7 @@ part of 'weather_repo.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getWeatherHash() => r'9ffe0be8185a19db368175508f81c4c82dae6765';
+String _$getWeatherHash() => r'32b0e60bf003151e7303467dfd5c95f7bafb3a17';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -190,7 +190,7 @@ final getCurrentCityProvider = AutoDisposeFutureProvider<Position>.internal(
 // ignore: unused_element
 typedef GetCurrentCityRef = AutoDisposeFutureProviderRef<Position>;
 String _$getLatLongFromAddressHash() =>
-    r'fe6fa9e7fa503c05d30f8b92743698f2db2489f2';
+    r'4db4393ceb2ae1d7e44dd72def7cef298a3dc65c';
 
 /// See also [getLatLongFromAddress].
 @ProviderFor(getLatLongFromAddress)
