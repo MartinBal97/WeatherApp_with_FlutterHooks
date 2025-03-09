@@ -2,9 +2,9 @@
 //
 //     final weather = weatherFromJson?(jsonString);
 
-import 'dart:convert';
+// import 'dart:convert';
 
-Weather weatherFromJson(String str) => Weather.fromJson(json.decode(str));
+// Weather weatherFromJson(String str) => Weather.fromJson(json.decode(str));
 
 //String weatherToJson(Weather data) => json.encode(data.toJson());
 
@@ -50,7 +50,7 @@ class Weather {
         main: json["main"] != null ? Main.fromJson(json["main"]) : null,
         visibility: json["visibility"],
         wind: json["wind"] != null ? Wind.fromJson(json["wind"]) : null,
-        rain: json["rain"] != null ? Rain.fromJson(json["rain"]) : null, // Se maneja el null
+        rain: json["rain"] != null ? Rain.fromJson(json["rain"]) : null,
         clouds: json["clouds"] != null ? Clouds.fromJson(json["clouds"]) : null,
         dt: json["dt"],
         sys: json["sys"] != null ? Sys.fromJson(json["sys"]) : null,

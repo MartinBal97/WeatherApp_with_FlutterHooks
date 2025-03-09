@@ -18,7 +18,7 @@ void showLocationInputDialog(
     isScrollControlled: true,
     builder: (context) {
       return Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 30, left: 24, right: 24),
+        padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom, top: 30, left: 24, right: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           spacing: 30,

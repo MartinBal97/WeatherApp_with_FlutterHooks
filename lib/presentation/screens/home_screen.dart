@@ -7,9 +7,9 @@ import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/data/weather_repo.dart';
 import 'package:weatherapp_with_flutterhooks/domain/weather_model.dart';
-import 'package:weatherapp_with_flutterhooks/presentation/common_widgets/home_widgets/drawer_home.dart';
-import 'package:weatherapp_with_flutterhooks/presentation/common_widgets/home_widgets/secondary_info.dart';
-import 'package:weatherapp_with_flutterhooks/presentation/common_widgets/modals.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/widgets/home_widgets/drawer_home.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/widgets/home_widgets/secondary_info.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/widgets/modals.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -20,7 +20,8 @@ class HomeScreen extends HookConsumerWidget {
     final lon = useState<double?>(null);
 
     final AsyncValue<Position> currentLocation = ref.watch(getCurrentCityProvider);
-    // Hook para actualizar lat y lon cuando se obtenga la posición
+
+    //* Update lat & long if postion data change
     useEffect(() {
       currentLocation.whenData((location) {
         lat.value = location.latitude;
@@ -29,7 +30,7 @@ class HomeScreen extends HookConsumerWidget {
       return null;
     }, [currentLocation]);
 
-    // Si lat y lon son null, mostrar el BottomSheet
+    //* If lat & long are null, show BottomSheet
     useEffect(() {
       if ((lat.value == null || lon.value == null) && currentLocation.hasError) {
         Future.microtask(() {
@@ -41,7 +42,7 @@ class HomeScreen extends HookConsumerWidget {
       return null;
     }, [lat.value, lon.value, currentLocation]);
 
-    // Si lat y lon están disponibles, obtener el clima
+    //* If lat & long are available, get the weather
     final AsyncValue<Weather> weatherData = (lat.value != null && lon.value != null)
         ? ref.watch(getWeatherProvider(lat: lat.value!, lon: lon.value!))
         : const AsyncValue.loading();
@@ -79,10 +80,11 @@ class HomeScreen extends HookConsumerWidget {
                                 style: context.s48w7.copyWith(fontSize: 40),
                               ),
                             ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.favorite_border_rounded),
-                            )
+                            if (data.name != null)
+                              IconButton(
+                                onPressed: () async {},
+                                icon: Icon(Icons.favorite_border_rounded),
+                              )
                           ],
                         ),
                         gapH20,
