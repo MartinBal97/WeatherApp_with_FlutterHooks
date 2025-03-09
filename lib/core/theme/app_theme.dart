@@ -1,16 +1,5 @@
 import 'package:flutter/material.dart';
 
-/* const Color purple500 = Color(0xFF7b147b);
-const Color purple200 = Color(0xFFb981b8);
-const Color purple100 = Color(0xFFF7FEE7); */
-
-const Color gray700 = Color(0xFF374151); //superdarkgrey
-const Color gray500 = Color(0xFF6B7280); //darkgrey
-const Color gray400 = Color(0xFF9CA3AF); //grey
-const Color gray200 = Color(0xFFE5E7EB); //lightgrey
-const Color gray100 = Color(0xFFF3F4F6); //superlightgrey
-const Color gray50 = Color(0xFFF9FAFB); //ultrawhite
-
 const seedColor = Colors.blueAccent;
 
 const Color black = Colors.black;
@@ -45,9 +34,7 @@ class AppTheme {
 
   ThemeData getTheme() => ThemeData(
         brightness: isDarkmode ? Brightness.dark : Brightness.light,
-
         colorSchemeSeed: seedColor,
-        // fontFamily: 'Geist', //* Ver si la quitamos
         textTheme: _textTheme,
       );
 }
@@ -63,7 +50,6 @@ extension UIThemeExtension on BuildContext {
   TextStyle get s18w4 => Theme.of(this).textTheme.titleLarge!;
   TextStyle get s16w7 => Theme.of(this).textTheme.titleMedium!;
   TextStyle get s16w4 => Theme.of(this).textTheme.titleSmall!;
-  //TextStyle get s16w7 => Theme.of(this).textTheme.bodyLarge!;
   TextStyle get s16w6 => Theme.of(this).textTheme.bodyMedium!;
   TextStyle get s14w6 => Theme.of(this).textTheme.bodySmall!;
   TextStyle get s14w4 => Theme.of(this).textTheme.labelLarge!;

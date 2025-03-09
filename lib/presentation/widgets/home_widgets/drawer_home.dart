@@ -5,6 +5,7 @@ import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/theme_manager.dart';
 import 'package:weatherapp_with_flutterhooks/core/utils/functions.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/widgets/modals.dart';
 
 class DrawerHomeScreen extends HookConsumerWidget {
   final ValueNotifier<double?> lat;
@@ -65,7 +66,9 @@ class DrawerHomeScreen extends HookConsumerWidget {
           ),
           ListTile(
             title: Text('See favorites'),
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              showFavoritesDialog(context, ref, lat, lon);
+            },
           ),
 
           gapH64,

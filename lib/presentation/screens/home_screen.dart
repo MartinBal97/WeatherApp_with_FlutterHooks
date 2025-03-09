@@ -5,22 +5,32 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
-import 'package:weatherapp_with_flutterhooks/data/weather_repo.dart';
-import 'package:weatherapp_with_flutterhooks/domain/weather_model.dart';
-import 'package:weatherapp_with_flutterhooks/presentation/common_widgets/home_widgets/drawer_home.dart';
-import 'package:weatherapp_with_flutterhooks/presentation/common_widgets/home_widgets/secondary_info.dart';
-import 'package:weatherapp_with_flutterhooks/presentation/common_widgets/modals.dart';
+import 'package:weatherapp_with_flutterhooks/data/models/weather_model.dart';
+import 'package:weatherapp_with_flutterhooks/data/repository/weather_repo.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/widgets/home_widgets/drawer_home.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/widgets/home_widgets/secondary_info.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/widgets/modals.dart';
+import 'package:weatherapp_with_flutterhooks/providers/favorites_controller.dart';
 
-class HomeScreen extends HookConsumerWidget {
+class HomeScreen extends StatefulHookConsumerWidget {
   const HomeScreen({super.key});
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
     final searchController = useTextEditingController();
     final lat = useState<double?>(null);
     final lon = useState<double?>(null);
 
     final AsyncValue<Position> currentLocation = ref.watch(getCurrentCityProvider);
-    // Hook para actualizar lat y lon cuando se obtenga la posición
+    final AsyncValue<List<String>> favoritesController = ref.watch(favoritesControllerProvider);
+    final FavoritesController favoritesControllerNotifier = ref.read(favoritesControllerProvider.notifier);
+
+    //* Update lat & long if postion data change
     useEffect(() {
       currentLocation.whenData((location) {
         lat.value = location.latitude;
@@ -29,7 +39,7 @@ class HomeScreen extends HookConsumerWidget {
       return null;
     }, [currentLocation]);
 
-    // Si lat y lon son null, mostrar el BottomSheet
+    //* If lat & long are null, show BottomSheet
     useEffect(() {
       if ((lat.value == null || lon.value == null) && currentLocation.hasError) {
         Future.microtask(() {
@@ -41,7 +51,7 @@ class HomeScreen extends HookConsumerWidget {
       return null;
     }, [lat.value, lon.value, currentLocation]);
 
-    // Si lat y lon están disponibles, obtener el clima
+    //* If lat & long are available, get the weather
     final AsyncValue<Weather> weatherData = (lat.value != null && lon.value != null)
         ? ref.watch(getWeatherProvider(lat: lat.value!, lon: lon.value!))
         : const AsyncValue.loading();
@@ -49,83 +59,101 @@ class HomeScreen extends HookConsumerWidget {
     return Scaffold(
         appBar: AppBar(),
         endDrawer: DrawerHomeScreen(lat: lat, lon: lon),
-        body: SingleChildScrollView(
-          child: Container(
-            height: context.heightMq,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [context.primary, context.background],
-                stops: [0.0, 1.0],
+        body: RefreshIndicator(
+          onRefresh: () => ref.refresh(getWeatherProvider(lat: lat.value!, lon: lon.value!).future),
+          child: SingleChildScrollView(
+            child: Container(
+              height: context.heightMq,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [context.primary, context.background],
+                  stops: [0.01, 1.0],
+                ),
               ),
-            ),
-            child: weatherData.when(
-              data: (Weather data) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: context.widthMq * 0.79,
-                              child: Text(
-                                data.name.toString(),
-                                overflow: TextOverflow.ellipsis,
-                                style: context.s48w7.copyWith(fontSize: 40),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.favorite_border_rounded),
-                            )
-                          ],
-                        ),
-                        gapH20,
-                        Container(
-                          decoration: BoxDecoration(
-                            color: context.primaryContainer,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+              child: weatherData.when(
+                data: (Weather data) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(DateFormat.yMMMEd().format(DateTime.now())),
-                                  Text(data.weather![0].main.toString()),
-                                  gapH10,
-                                  Text(
-                                    '${data.main!.temp!.round()}º C',
-                                    style: context.s30w7,
-                                  ),
-                                ],
+                              SizedBox(
+                                width: context.widthMq * 0.79,
+                                child: Text(
+                                  data.name.toString(),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: context.s48w7.copyWith(fontSize: 40),
+                                ),
                               ),
-                              Image.network(
-                                'https://openweathermap.org/img/wn/${data.weather![0].icon}.png',
-                                scale: 0.4,
-                              ),
+                              if (data.name != null)
+                                favoritesController.when(
+                                  data: (favs) {
+                                    final isFavorite = favs.contains(data.name);
+
+                                    return IconButton(
+                                      onPressed: () {
+                                        favoritesControllerNotifier.toggleFavoriteCity(data.name!, favs);
+                                        setState(() {});
+                                      },
+                                      icon: Icon(
+                                        isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                                        color: isFavorite ? Colors.redAccent : null,
+                                      ),
+                                    );
+                                  },
+                                  error: (_, __) => const SizedBox(),
+                                  loading: () => const CircularProgressIndicator(),
+                                ),
                             ],
                           ),
-                        ),
-                        gapH24,
-                        SecondaryWeatherInfo(data: data),
-                      ],
+                          gapH20,
+                          Container(
+                            decoration: BoxDecoration(
+                              color: context.primaryContainer,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(DateFormat.yMMMEd().format(DateTime.now())),
+                                    Text(data.weather![0].main.toString()),
+                                    gapH10,
+                                    Text(
+                                      '${data.main!.temp!.round()}º C',
+                                      style: context.s30w7,
+                                    ),
+                                  ],
+                                ),
+                                Image.network(
+                                  'https://openweathermap.org/img/wn/${data.weather![0].icon}.png',
+                                  scale: 0.4,
+                                ),
+                              ],
+                            ),
+                          ),
+                          gapH24,
+                          SecondaryWeatherInfo(data: data),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              error: (er, st) => Center(
-                child: Text(er.toString()),
-              ),
-              loading: () => Center(
-                child: CircularProgressIndicator(),
+                  );
+                },
+                error: (er, st) => Center(
+                  child: Text(er.toString()),
+                ),
+                loading: () => Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
             ),
           ),

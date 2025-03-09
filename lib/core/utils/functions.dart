@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:weatherapp_with_flutterhooks/data/weather_repo.dart';
+import 'package:weatherapp_with_flutterhooks/data/repository/weather_repo.dart';
 
 Future<void> searchLocation(
   BuildContext context,

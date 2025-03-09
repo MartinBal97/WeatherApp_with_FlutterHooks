@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
-import 'package:weatherapp_with_flutterhooks/domain/weather_model.dart';
+import 'package:weatherapp_with_flutterhooks/data/models/weather_model.dart';
 
 class SecondaryWeatherInfo extends HookWidget {
   final Weather data;

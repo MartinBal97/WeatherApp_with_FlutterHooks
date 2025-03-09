@@ -7,9 +7,7 @@ class DarkMode extends _$DarkMode {
   @override
   bool build() => false;
 
-  void changeThemeMode() {
-    state = !state;
-  }
+  void changeThemeMode() => state = !state;
 }
 
 // @Riverpod(keepAlive: true)

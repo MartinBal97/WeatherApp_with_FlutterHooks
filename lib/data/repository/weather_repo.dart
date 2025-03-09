@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:weatherapp_with_flutterhooks/domain/weather_model.dart';
+import 'package:weatherapp_with_flutterhooks/data/models/weather_model.dart';
 
 part 'weather_repo.g.dart';
 
@@ -18,6 +20,8 @@ Future<Weather> getWeather(Ref ref, {required double lat, required double lon}) 
 
   try {
     final response = await dio.get(url);
+
+    log(response.data.toString());
     return Weather.fromJson(response.data);
   } catch (e) {
     throw Exception('Error getting the weather: $e');
