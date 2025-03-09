@@ -34,10 +34,3 @@ flutter:
   assets:
     - assets/images/
     - .env
-
-  fonts:
-    - family: Geist
-      fonts:
-        - asset: assets/fonts/Geist/Geist-Bold.otf
-        - asset: assets/fonts/Geist/Geist-Regular.otf
-        - asset: assets/fonts/Geist/Geist-SemiBold.otf

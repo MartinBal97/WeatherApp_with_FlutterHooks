@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/core/utils/functions.dart';
+import 'package:weatherapp_with_flutterhooks/providers/favorites_controller.dart';
 
 void showLocationInputDialog(
   BuildContext context,
@@ -35,6 +38,61 @@ void showLocationInputDialog(
             gapH16,
           ],
         ),
+      );
+    },
+  );
+}
+
+void showFavoritesDialog(
+  BuildContext context,
+  WidgetRef ref,
+  ValueNotifier<double?> lat,
+  ValueNotifier<double?> lon,
+) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          final favoritesController = ref.watch(favoritesControllerProvider);
+          final favoritesControllerNotifier = ref.read(favoritesControllerProvider.notifier);
+
+          return favoritesController.when(
+            data: (data) {
+              if (data.isEmpty) {
+                return Center(child: Text("You don't have favorite cities"));
+              }
+
+              return ListView(
+                padding: EdgeInsets.all(24),
+                children: data.map((fav) {
+                  return ListTile(
+                    title: Text(fav),
+                    onTap: () {
+                      searchLocation(context, ref, fav, lat, lon);
+                      Navigator.pop(context);
+                    },
+                    trailing: IconButton(
+                      icon: Icon(Icons.remove_circle_outline_rounded),
+                      onPressed: () async {
+                        await favoritesControllerNotifier.toggleFavoriteCity(fav, data);
+                        Future.wait([
+                          ref.refresh(favoritesControllerProvider.future),
+                        ]);
+                        setState(() {});
+                      },
+                    ),
+                  );
+                }).toList(),
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stackTrace) {
+              log(error.toString());
+              return Center(child: Text('We had an error getting the favorite list'));
+            },
+          );
+        },
       );
     },
   );
