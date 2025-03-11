@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/core/utils/functions.dart';
-import 'package:weatherapp_with_flutterhooks/providers/favorites_controller.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/controllers/favorites_controller.dart';
 
 void showLocationInputDialog(
   BuildContext context,

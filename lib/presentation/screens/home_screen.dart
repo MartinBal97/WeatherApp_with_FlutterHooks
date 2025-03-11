@@ -5,12 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/data/models/weather_model.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/controllers/favorites_controller.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/controllers/positions_controller.dart';
+import 'package:weatherapp_with_flutterhooks/presentation/controllers/weather_controller.dart';
 import 'package:weatherapp_with_flutterhooks/presentation/widgets/home_widgets/drawer_home.dart';
 import 'package:weatherapp_with_flutterhooks/presentation/widgets/home_widgets/secondary_info.dart';
 import 'package:weatherapp_with_flutterhooks/presentation/widgets/modals.dart';
-import 'package:weatherapp_with_flutterhooks/providers/favorites_controller.dart';
-import 'package:weatherapp_with_flutterhooks/providers/positions_controller.dart';
-import 'package:weatherapp_with_flutterhooks/providers/weather_controller.dart';
 
 class HomeScreen extends StatefulHookConsumerWidget {
   const HomeScreen({super.key});
