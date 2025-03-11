@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/data/models/weather_model.dart';
-import 'package:weatherapp_with_flutterhooks/data/repository/weather_repo.dart';
 import 'package:weatherapp_with_flutterhooks/presentation/widgets/home_widgets/drawer_home.dart';
 import 'package:weatherapp_with_flutterhooks/presentation/widgets/home_widgets/secondary_info.dart';
 import 'package:weatherapp_with_flutterhooks/presentation/widgets/modals.dart';
 import 'package:weatherapp_with_flutterhooks/providers/favorites_controller.dart';
+import 'package:weatherapp_with_flutterhooks/providers/positions_controller.dart';
+import 'package:weatherapp_with_flutterhooks/providers/weather_controller.dart';
 
 class HomeScreen extends StatefulHookConsumerWidget {
   const HomeScreen({super.key});
@@ -26,8 +26,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final lat = useState<double?>(null);
     final lon = useState<double?>(null);
 
-    final AsyncValue<Position> currentLocation = ref.watch(getCurrentCityProvider);
-    final AsyncValue<List<String>> favoritesController = ref.watch(favoritesControllerProvider);
+    final currentLocation = ref.watch(positionsControllerProvider);
+    final favoritesController = ref.watch(favoritesControllerProvider);
     final FavoritesController favoritesControllerNotifier = ref.read(favoritesControllerProvider.notifier);
 
     //* Update lat & long if postion data change

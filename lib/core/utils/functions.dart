@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:weatherapp_with_flutterhooks/data/repository/weather_repo.dart';
+import 'package:weatherapp_with_flutterhooks/providers/positions_controller.dart';
 
 Future<void> searchLocation(
   BuildContext context,
@@ -12,7 +12,7 @@ Future<void> searchLocation(
 }) async {
   if (city.isNotEmpty) {
     try {
-      final locations = await ref.read(getLatLongFromAddressProvider(city).future);
+      final locations = await ref.read(positionsControllerProvider.notifier).getLatLongFromAddress(city);
       lat.value = locations.latitude;
       lon.value = locations.longitude;
 
