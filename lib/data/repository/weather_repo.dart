@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:weatherapp_with_flutterhooks/core/services/local_storage_service.dart';
 import 'package:weatherapp_with_flutterhooks/data/models/weather_model.dart';
 
 part 'weather_repo.g.dart';
@@ -20,7 +21,13 @@ class WeatherRepo {
       final response = await dio.get(url);
 
       log(response.data.toString());
-      return Weather.fromJson(response.data);
+      final weather = Weather.fromJson(response.data);
+
+      if (weather.name != null) {
+        await LocalStorageService.saveLastCity(weather.name!);
+      }
+
+      return weather;
     } catch (e) {
       throw Exception('Error getting the weather: $e');
     }

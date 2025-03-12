@@ -34,7 +34,7 @@ class AppTheme {
 
   ThemeData getTheme() => ThemeData(
         brightness: isDarkmode ? Brightness.dark : Brightness.light,
-        colorSchemeSeed: seedColor,
+        colorSchemeSeed: Colors.lightGreen.shade700,
         textTheme: _textTheme,
       );
 }

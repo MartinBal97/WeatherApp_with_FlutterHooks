@@ -7,7 +7,7 @@ part of 'positions_controller.dart';
 // **************************************************************************
 
 String _$positionsControllerHash() =>
-    r'd68c098277fe238a4a091b22acec47b808c05d3d';
+    r'b57c0078946b4433e829a81cf14a86bd9a50d28c';
 
 /// See also [PositionsController].
 @ProviderFor(PositionsController)

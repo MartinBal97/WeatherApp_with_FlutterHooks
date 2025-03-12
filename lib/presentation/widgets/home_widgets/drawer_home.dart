@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
+import 'package:weatherapp_with_flutterhooks/core/services/local_storage_service.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/theme_manager.dart';
 import 'package:weatherapp_with_flutterhooks/core/utils/functions.dart';
@@ -20,6 +21,8 @@ class DrawerHomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
+
+    final isDarkModeNotifier = ref.read(darkModeProvider.notifier);
 
     return Drawer(
       child: ListView(
@@ -70,21 +73,17 @@ class DrawerHomeScreen extends HookConsumerWidget {
               showFavoritesDialog(context, ref, lat, lon);
             },
           ),
-
           gapH64,
           gapH64,
           gapH64,
           gapH64,
           gapH64,
-          // SwitchListTile(
-          //   value: ref.watch(darkModeProvider),
-          //   onChanged: (_) => ref.read(darkModeProvider.notifier).changeThemeMode(),
-          //   title: Text('Escuchar cambios en tiempo real'),
-          //   activeColor: Colors.green,
-          // ),
           SwitchListTile(
             value: ref.watch(darkModeProvider),
-            onChanged: (_) => ref.read(darkModeProvider.notifier).changeThemeMode(),
+            onChanged: (value) async {
+              await LocalStorageService.saveIsDarkTheme(value);
+              isDarkModeNotifier.changeThemeMode(value);
+            },
             title: Text('Dark Theme'),
             activeColor: Colors.green,
           ),
