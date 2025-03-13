@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 
-const seedColor = Colors.blueAccent;
-
-const Color black = Colors.black;
-const Color white = Colors.white;
-const Color redAlert = Color(0xFF950A00);
-
 const FontWeight w7 = FontWeight.w700;
 const FontWeight w6 = FontWeight.w600;
 const FontWeight w5 = FontWeight.w500;

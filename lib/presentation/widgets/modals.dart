@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
@@ -32,7 +30,7 @@ void showLocationInputDialog(
               decoration: const InputDecoration(labelText: 'Enter a city'),
             ),
             ElevatedButton(
-              onPressed: () => searchLocation(context, ref, searchController.text, lat, lon),
+              onPressed: () => searchLocationByCityName(context, ref, searchController.text, lat, lon),
               child: const Text('Confirm'),
             ),
             gapH16,
@@ -67,9 +65,11 @@ void showFavoritesDialog(
                 padding: EdgeInsets.all(24),
                 children: data.map((fav) {
                   return ListTile(
-                    title: Text(fav),
+                    title: Text(fav.name),
                     onTap: () {
-                      searchLocation(context, ref, fav, lat, lon);
+                      lat.value = fav.lat;
+                      lon.value = fav.lon;
+                      Navigator.pop(context);
                       Navigator.pop(context);
                     },
                     trailing: IconButton(
@@ -86,11 +86,12 @@ void showFavoritesDialog(
                 }).toList(),
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stackTrace) {
-              log(error.toString());
-              return Center(child: Text('We had an error getting the favorite list'));
-            },
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            error: (_, __) => Center(
+              child: Text('We had an error getting the favorite list'),
+            ),
           );
         },
       );
