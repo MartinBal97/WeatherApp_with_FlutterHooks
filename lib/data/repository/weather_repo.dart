@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:weatherapp_with_flutterhooks/core/services/local_storage_service.dart';
+import 'package:weatherapp_with_flutterhooks/data/models/favorite_model.dart';
 import 'package:weatherapp_with_flutterhooks/data/models/weather_model.dart';
 
 part 'weather_repo.g.dart';
@@ -21,10 +22,13 @@ class WeatherRepo {
       final response = await dio.get(url);
 
       log(response.data.toString());
+
       final weather = Weather.fromJson(response.data);
 
-      if (weather.name != null) {
-        await LocalStorageService.saveLastCity(weather.name!);
+      if (weather.coord?.lat != null && weather.coord?.lon != null && weather.name != null) {
+        await LocalStorageService.saveLastCity(
+          Favorite(name: weather.name!, lat: weather.coord!.lat!, lon: weather.coord!.lon!),
+        );
       }
 
       return weather;

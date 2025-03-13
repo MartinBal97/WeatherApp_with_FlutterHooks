@@ -4,8 +4,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
+import 'package:weatherapp_with_flutterhooks/core/services/local_storage_service.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/core/utils/functions.dart';
+import 'package:weatherapp_with_flutterhooks/data/models/favorite_model.dart';
 import 'package:weatherapp_with_flutterhooks/data/models/weather_model.dart';
 import 'package:weatherapp_with_flutterhooks/presentation/controllers/favorites_controller.dart';
 import 'package:weatherapp_with_flutterhooks/presentation/controllers/positions_controller.dart';
@@ -31,22 +33,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final lon = useState<double?>(null);
 
     /// Controllers
-    final AsyncValue<Position> currentLocation = ref.watch(positionsControllerProvider);
-    final AsyncValue<List<String>> favoritesController = ref.watch(favoritesControllerProvider);
+    final AsyncValue<Position> positionController = ref.watch(positionsControllerProvider);
+    final AsyncValue<List<Favorite>> favoritesController = ref.watch(favoritesControllerProvider);
     final FavoritesController favoritesControllerNotifier = ref.read(favoritesControllerProvider.notifier);
+
+    Favorite? lastCity;
 
     /// Update lat & long if position data changes
     useEffect(() {
-      currentLocation.whenData((location) {
-        lat.value = location.latitude;
-        lon.value = location.longitude;
+      Future(() async {
+        if (positionController.hasValue && positionController.value != null) {
+          lat.value = positionController.value!.latitude;
+          lon.value = positionController.value!.longitude;
+        } else if (positionController.hasError || positionController.value == null) {
+          lastCity = await LocalStorageService.loadLastCity();
+          if (lastCity != null) {
+            lat.value = lastCity!.lat;
+            lon.value = lastCity!.lon;
+          }
+        }
       });
-      return null;
-    }, [currentLocation]);
 
-    /// If lat & long are null, show BottomSheet
+      return null;
+    }, [positionController]);
+
+    /// If lat & long are null and position isn't available, show BottomSheet
     useEffect(() {
-      if ((lat.value == null || lon.value == null) && currentLocation.hasError) {
+      if ((lat.value == null || lon.value == null) && positionController.hasError) {
         Future.microtask(() {
           if (context.mounted) {
             return showLocationInputDialog(context, ref, searchController, lat, lon);
@@ -54,7 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         });
       }
       return null;
-    }, [lat.value, lon.value, currentLocation]);
+    }, [lat.value, lon.value, positionController]);
 
     /// If lat & long are available, get the weather
     final AsyncValue<Weather> weatherData = (lat.value != null && lon.value != null)
@@ -108,7 +121,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildHeader(
     BuildContext context,
     Weather data,
-    AsyncValue<List<String>> favoritesController,
+    AsyncValue<List<Favorite>> favoritesController,
     FavoritesController favoritesControllerNotifier,
   ) {
     return Row(
@@ -120,14 +133,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             text: data.name.toString(),
           ),
         ),
-        if (data.name != null)
+        if (data.name != null && data.coord?.lat != null && data.coord?.lon != null)
           favoritesController.when(
             data: (favs) {
-              final isFavorite = favs.contains(data.name);
+              final isFavorite = favs.any((ele) => ele.name == data.name);
 
               return IconButton(
-                onPressed: () {
-                  favoritesControllerNotifier.toggleFavoriteCity(data.name!, favs);
+                onPressed: () async {
+                  favoritesControllerNotifier.toggleFavoriteCity(
+                    Favorite(lat: data.coord!.lat!, lon: data.coord!.lon!, name: data.name!),
+                    favs,
+                  );
                   setState(() {});
                 },
                 icon: Icon(
@@ -136,7 +152,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               );
             },
-            error: (_, __) => const SizedBox(),
+            error: (_, __) => const CircularProgressIndicator(),
             loading: () => const CircularProgressIndicator(),
           ),
       ],

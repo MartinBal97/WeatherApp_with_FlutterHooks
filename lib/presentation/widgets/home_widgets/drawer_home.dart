@@ -61,7 +61,7 @@ class DrawerHomeScreen extends HookConsumerWidget {
                     contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   ),
                   onEditingComplete: () {
-                    searchLocation(context, ref, searchController.text, lat, lon, isDrawer: true);
+                    searchLocationByCityName(context, ref, searchController.text, lat, lon);
                   },
                 ),
               ],

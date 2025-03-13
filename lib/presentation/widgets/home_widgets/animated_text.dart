@@ -9,11 +9,16 @@ class AnimatedText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String newText = text;
+    if (text.length > 22) {
+      newText = '${text.substring(0, 22)}...';
+    }
+
     return AnimatedTextKit(
       isRepeatingAnimation: false,
       animatedTexts: [
         TypewriterAnimatedText(
-          text,
+          newText,
           cursor: '',
           textStyle: const TextStyle(
             fontSize: 40.0,
