@@ -9,13 +9,3 @@ class DarkMode extends _$DarkMode {
 
   void changeThemeMode(bool storedTheme) => state = storedTheme;
 }
-
-// @Riverpod(keepAlive: true)
-// class ColorApp extends _$ColorApp {
-//   @override
-//   String build() => 'purple';
-
-//   void changeColorApp(itemBottomNavigationBar) {
-//     state = itemBottomNavigationBar;
-//   }
-// }

@@ -10,7 +10,6 @@ import 'package:weatherapp_with_flutterhooks/presentation/screens/home_screen.da
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  //Initialize dotenv
   await dotenv.load(fileName: ".env");
 
   runApp(const ProviderScope(child: MainApp()));
