@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:weatherapp_with_flutterhooks/core/constants/sizes.dart';
 import 'package:weatherapp_with_flutterhooks/core/theme/app_theme.dart';
 import 'package:weatherapp_with_flutterhooks/data/models/weather_model.dart';
 
@@ -61,19 +60,18 @@ class SecondaryWeatherInfo extends HookWidget {
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 10,
               children: [
                 Text(
                   detail['label']!,
                   overflow: TextOverflow.ellipsis,
                   style: context.s12w7.copyWith(color: context.primary),
                 ),
-                gapH10,
                 SvgPicture.asset(
                   detail['icon'],
                   colorFilter: ColorFilter.mode(context.onPrimaryContainer, BlendMode.modulate),
                   height: 30,
                 ),
-                gapH10,
                 Text(detail['value']!, style: TextStyle(fontSize: 16)),
               ],
             ),

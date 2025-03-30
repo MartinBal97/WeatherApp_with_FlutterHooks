@@ -76,9 +76,6 @@ void showFavoritesDialog(
                       icon: Icon(Icons.remove_circle_outline_rounded),
                       onPressed: () async {
                         await favoritesControllerNotifier.toggleFavoriteCity(fav, data);
-                        Future.wait([
-                          ref.refresh(favoritesControllerProvider.future),
-                        ]);
                         setState(() {});
                       },
                     ),
