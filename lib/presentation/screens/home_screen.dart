@@ -41,7 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     /// Update lat & long if position data changes
     useEffect(() {
-      Future(() async {
+      Future.microtask(() async {
         if (positionController.hasValue && positionController.value != null) {
           lat.value = positionController.value!.latitude;
           lon.value = positionController.value!.longitude;
@@ -53,7 +53,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }
         }
       });
-
       return null;
     }, [positionController]);
 
@@ -136,11 +135,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         if (data.name != null && data.coord?.lat != null && data.coord?.lon != null)
           favoritesController.when(
             data: (favs) {
-              final isFavorite = favs.any((ele) => ele.name == data.name);
+              final bool isFavorite = favs.any((ele) => ele.name == data.name);
 
               return IconButton(
                 onPressed: () async {
-                  favoritesControllerNotifier.toggleFavoriteCity(
+                  await favoritesControllerNotifier.toggleFavoriteCity(
                     Favorite(lat: data.coord!.lat!, lon: data.coord!.lon!, name: data.name!),
                     favs,
                   );
@@ -183,7 +182,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 style: context.s30w7,
               ),
               gapH10,
-              Text(capitalizeFirstLetter(data.weather![0].description.toString())),
+              Text(capitalizeFirstLetter(data.weather![0].description ?? '')),
             ],
           ),
           Image.network(

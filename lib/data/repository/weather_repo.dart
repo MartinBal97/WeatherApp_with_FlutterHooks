@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,7 +19,7 @@ class WeatherRepo {
     try {
       final response = await dio.get(url);
 
-      log(response.data.toString());
+      // log(response.data.toString());
 
       final weather = Weather.fromJson(response.data);
 

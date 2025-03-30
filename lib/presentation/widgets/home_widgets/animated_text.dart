@@ -22,7 +22,6 @@ class AnimatedText extends StatelessWidget {
           cursor: '',
           textStyle: const TextStyle(
             fontSize: 40.0,
-            overflow: TextOverflow.ellipsis,
             fontWeight: w7,
           ),
           speed: const Duration(milliseconds: 100),
