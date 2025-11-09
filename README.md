@@ -77,10 +77,3 @@ To access the OpenWeatherMap API, you will need an API key. You can get it [here
 
 1. Copy the .env.template file and rename it to .env.
 2. Add the corresponding key to the .env file.
-
-## The project uses a 120-character line length format. It is recommended to configure your editor with the following settings in /Code/User/settings.json
-
-"editor.rulers": [120],
-"editor.wordWrapColumn": 120,
-"editor.wordWrap": "off",
- "dart.lineLength": 120,
