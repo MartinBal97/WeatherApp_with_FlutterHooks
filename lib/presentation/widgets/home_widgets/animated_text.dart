@@ -20,10 +20,7 @@ class AnimatedText extends StatelessWidget {
         TypewriterAnimatedText(
           newText,
           cursor: '',
-          textStyle: const TextStyle(
-            fontSize: 40.0,
-            fontWeight: w7,
-          ),
+          textStyle: const TextStyle(fontSize: 40.0, fontWeight: w7),
           speed: const Duration(milliseconds: 100),
         ),
       ],

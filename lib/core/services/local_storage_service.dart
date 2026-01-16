@@ -7,12 +7,15 @@ class LocalStorageService {
   //* Favorites Cities
   static Future<void> saveFavorites(List<Favorite> favorites) async {
     final prefs = await SharedPreferences.getInstance();
+
     final List<String> jsonList = favorites.map((fav) => jsonEncode(fav.toJson())).toList();
+
     await prefs.setStringList('favorites', jsonList);
   }
 
   static Future<List<Favorite>> loadFavorites() async {
     final prefs = await SharedPreferences.getInstance();
+
     final List<String>? jsonList = prefs.getStringList('favorites');
 
     if (jsonList == null) return [];
