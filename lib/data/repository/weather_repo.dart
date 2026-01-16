@@ -17,7 +17,7 @@ class WeatherRepo {
     final url = 'https://api.openweathermap.org/data/2.5/weather?&units=metric&lat=$lat&lon=$lon&appid=$apiKey';
 
     try {
-      final response = await dio.get(url);
+      final Response response = await dio.get(url);
 
       // log(response.data.toString());
 

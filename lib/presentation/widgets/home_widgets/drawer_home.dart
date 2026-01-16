@@ -85,7 +85,7 @@ class DrawerHomeScreen extends HookConsumerWidget {
               isDarkModeNotifier.changeThemeMode(value);
             },
             title: Text('Dark Theme'),
-            activeColor: Colors.green,
+            activeThumbColor: Colors.green,
           ),
         ],
       ),
